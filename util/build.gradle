@@ -1,0 +1,9 @@
+group 'com.grf'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile group: 'com.auth0', name: 'java-jwt', version: '3.3.0'
+}

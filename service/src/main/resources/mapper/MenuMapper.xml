@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aus.repository.db.mybaits.MenuMapper">
+    <resultMap id="BaseResultMap" type="com.aus.repository.po.MenuPO">
+        <id column="id" property="id" />
+        <result column="parent_id" property="parentId" />
+        <result column="menu_name" property="menuName" />
+        <result column="menu_code" property="menuCode" />
+        <result column="create_date" property="createDate" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, parent_id, menu_name, menu_code, create_date
+    </sql>
+
+    <insert id="insert">
+      insert into t_menu(parent_id,menu_name,menu_code,create_date) values (#{parentId},#{menuName},#{menuCode},#{createDate})
+    </insert>
+
+    <select id="select" parameterType="com.aus.repository.po.MenuPO" resultType="com.aus.repository.po.MenuPO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_menu
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="parentId != null">
+                and parent_id = #{parentId}
+            </if>
+            <if test="menuName != null">
+                and menu_name = #{menuName}
+            </if>
+            <if test="menuCode != null">
+                and menu_code = #{menuCode}
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+
+    <update id="update">
+        update t_menu
+        <set>
+            <if test="menuName != null and menuName != ''">
+                menu_name=#{menuName},
+            </if>
+            <if test="menuCode != null and menuCode != ''">
+                menu_code=#{menuCode},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id=#{id}
+            </if>
+        </where>
+    </update>
+    
+    <delete id="delete">
+        delete from t_menu where id=#{id}
+    </delete>
+
+</mapper>

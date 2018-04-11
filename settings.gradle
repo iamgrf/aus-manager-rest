@@ -1,0 +1,6 @@
+rootProject.name = 'aus-manager-rest'
+include 'service'
+include 'util'
+include 'vo-dto'
+include 'common'
+

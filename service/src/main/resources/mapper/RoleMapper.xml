@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.aus.repository.db.mybaits.RoleMapper">
+    <resultMap id="BaseResultMap" type="com.aus.repository.po.RolePO">
+        <id column="id" property="id" />
+        <result column="role_name" property="roleName" />
+        <result column="code" property="code" />
+        <result column="authority_code" property="authorityCode" />
+        <result column="create_date" property="createDate" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, role_name, code, authority_code, create_date
+    </sql>
+
+    <insert id="insert">
+      insert into t_role(role_name,code,authority_code,create_date) values (#{roleName},#{code},#{authorityCode},#{createDate})
+    </insert>
+
+    <select id="select" parameterType="com.aus.repository.po.RolePO" resultType="com.aus.repository.po.RolePO" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from t_role
+        <where>
+            <if test="id != null">
+                id = #{id}
+            </if>
+            <if test="roleName != null and roleName != ''">
+                and role_name = #{roleName}
+            </if>
+            <if test="code != null and code != ''">
+                and code = #{code}
+            </if>
+            <if test="authorityCode != null and authorityCode != ''">
+                and authority_code = #{authorityCode}
+            </if>
+        </where>
+        order by create_date desc
+    </select>
+
+    <update id="update">
+        update t_role
+        <set>
+            <if test="roleName != null and roleName != ''">
+                role_name=#{roleName},
+            </if>
+            <if test="code != null and code != ''">
+                code=#{code},
+            </if>
+            <if test="authorityCode != null and authorityCode != ''">
+                authority_code=#{authorityCode},
+            </if>
+        </set>
+        <where>
+            <if test="id != null">
+                id=#{id}
+            </if>
+        </where>
+    </update>
+
+    <delete id="delete">
+        delete from t_role where id=#{id}
+    </delete>
+
+
+</mapper>
