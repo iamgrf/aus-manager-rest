@@ -41,7 +41,9 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-//        return true;
+        if (path.endsWith(".html") || path.endsWith(".css") || path.endsWith(".js")){
+            return true;
+        }
         String token = request.getParameter("token");
         if (StringUtils.isNotEmpty(token)){
             try{
