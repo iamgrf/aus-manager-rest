@@ -51,7 +51,7 @@ public class UserServiceImpl implements UserService {
         if ("0".equals(userBO.getDisable())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_DISABLE);
         }
-        String password = PasswordUtil.encryptedToString(loginVO.getPassword(), loginVO.getAccount()).toLowerCase();
+        String password = PasswordUtil.generatePassword(StringUtil.md5(loginVO.getPassword()) + loginVO.getAccount());
         if (!password.equals(userBO.getPassword())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_USER_PWD);
         }
@@ -83,11 +83,11 @@ public class UserServiceImpl implements UserService {
         String account = userJSON.getString("account");
         UserBO userBO = userDomain.findByAccount(account);
 
-        String password = PasswordUtil.encryptedToString(updatePasswordVO.getOldPassword(), account).toLowerCase();
+        String password = PasswordUtil.generatePassword(updatePasswordVO.getOldPassword());
         if (!password.equals(userBO.getPassword())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_OLDPASSWORD);
         }
-        password = PasswordUtil.encryptedToString(updatePasswordVO.getNewPassword(), account).toLowerCase();
+        password = PasswordUtil.generatePassword(updatePasswordVO.getNewPassword());
         userBO = new UserBO();
         userBO.setAccount(account);
         userBO.setPassword(password);
@@ -134,7 +134,7 @@ public class UserServiceImpl implements UserService {
 
         userBO = new UserBO();
         BeanUtils.copyProperties(addUserVO, userBO);
-        userBO.setPassword(PasswordUtil.encryptedToString(addUserVO.getPassword(), addUserVO.getAccount()).toLowerCase());
+        userBO.setPassword(PasswordUtil.generatePassword(StringUtil.md5(addUserVO.getPassword()) + addUserVO.getAccount()));
         userBO.setDisable("1");
         userBO.setCreateDate(new Date());
 
