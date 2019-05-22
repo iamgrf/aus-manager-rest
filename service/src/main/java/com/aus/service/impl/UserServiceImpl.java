@@ -155,8 +155,6 @@ public class UserServiceImpl implements UserService {
             return MsgUtil.fail(ErrorTypeEnum.ERROR_PARAM);
         }
 
-
-
         UserBO userBO = new UserBO();
         userBO.setAccount(updateUserVO.getAccount());
         userBO.setRealName(updateUserVO.getRealName());
