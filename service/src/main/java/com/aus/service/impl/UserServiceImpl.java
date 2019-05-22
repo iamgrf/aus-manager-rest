@@ -51,9 +51,12 @@ public class UserServiceImpl implements UserService {
         if ("0".equals(userBO.getDisable())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_DISABLE);
         }
-        String password = PasswordUtil.generatePassword(StringUtil.md5(loginVO.getPassword()) + loginVO.getAccount());
-        if (!password.equals(userBO.getPassword())){
+        if (!PasswordUtil.verify( loginVO.getPassword() + loginVO.getAccount(), userBO.getPassword())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_USER_PWD);
+        }
+
+        if (userBO.getRoleBO() == null || userBO.getRoleBO().getAuthorityCode() == null){
+            return MsgUtil.fail(ErrorTypeEnum.ERROR_DISACCESS);
         }
 
         ImmutableMap<String, String> userMap = ImmutableMap.of("account", userBO.getAccount(), "authorityCode", userBO.getRoleBO() == null ? "" : userBO.getRoleBO().getAuthorityCode());
@@ -110,6 +113,7 @@ public class UserServiceImpl implements UserService {
             listUserDTO = new ListUserDTO();
             listUserDTO.setId(userBOs.get(i).getId());
             listUserDTO.setRoleId(userBOs.get(i).getRoleBO().getId());
+            listUserDTO.setRoleName(userBOs.get(i).getRoleBO().getRoleName());
             listUserDTO.setAccount(userBOs.get(i).getAccount());
             listUserDTO.setRealName(userBOs.get(i).getRealName());
             listUserDTO.setCreateDate(DateUtil.dateToStr(userBOs.get(i).getCreateDate()));
@@ -134,7 +138,7 @@ public class UserServiceImpl implements UserService {
 
         userBO = new UserBO();
         BeanUtils.copyProperties(addUserVO, userBO);
-        userBO.setPassword(PasswordUtil.generatePassword(StringUtil.md5(addUserVO.getPassword()) + addUserVO.getAccount()));
+        userBO.setPassword(PasswordUtil.generatePassword(addUserVO.getPassword() + addUserVO.getAccount()));
         userBO.setDisable("1");
         userBO.setCreateDate(new Date());
 

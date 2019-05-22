@@ -6,6 +6,7 @@ import com.aus.Route;
 import com.aus.vo.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -23,12 +24,12 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = Route.LOGIN)
-    public Map<String, Object> login(LoginVO loginVO){
+    public Map<String, Object> login(@RequestBody LoginVO loginVO){
         return userService.login(loginVO);
     }
 
     @RequestMapping(value = Route.LIST_USER)
-    public Map<String, Object> listUser(ListUserVO listUserVO, PageUtil pageUtil){
+    public Map<String, Object> listUser(@RequestBody ListUserVO listUserVO, PageUtil pageUtil){
         return userService.listUser(listUserVO, pageUtil);
     }
 
@@ -38,7 +39,7 @@ public class UserController {
     }
 
     @RequestMapping(value = Route.ADD_USER)
-    public Map<String, Object> addUser(AddUserVO addUserVO){
+    public Map<String, Object> addUser(@RequestBody AddUserVO addUserVO){
         return userService.addUser(addUserVO);
     }
 
@@ -53,7 +54,7 @@ public class UserController {
     }
 
     @RequestMapping(value = Route.AUTHORIZED_USER)
-    public Map<String, Object> authorized(AuthorizedVO authorizedVO){
+    public Map<String, Object> authorized(@RequestBody AuthorizedVO authorizedVO){
         return userService.authorized(authorizedVO);
     }
 

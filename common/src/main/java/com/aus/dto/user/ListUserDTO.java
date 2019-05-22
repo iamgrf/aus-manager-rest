@@ -7,6 +7,7 @@ public class ListUserDTO {
 
     private Integer id;
     private Integer roleId;
+    private String roleName;
     private String realName;
     private String account;
     private String createDate;
@@ -49,5 +50,13 @@ public class ListUserDTO {
 
     public void setRoleId(Integer roleId) {
         this.roleId = roleId;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 }

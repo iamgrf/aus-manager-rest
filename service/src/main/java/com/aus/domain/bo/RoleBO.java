@@ -20,6 +20,11 @@ public class RoleBO {
         this.id = id;
     }
 
+    public RoleBO(Integer id, String roleName) {
+        this.id = id;
+        this.roleName = roleName;
+    }
+
     public Integer getId() {
         return id;
     }

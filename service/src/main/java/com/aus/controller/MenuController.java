@@ -8,6 +8,7 @@ import com.aus.vo.menu.ListMenuVO;
 import com.aus.vo.menu.UpdateMenuVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.Map;
@@ -38,7 +39,7 @@ public class MenuController {
     }
 
     @RequestMapping(value = Route.UPDATE_MENU)
-    public Map<String, Object> updateMenu(UpdateMenuVO updateMenuVO){
+    public Map<String, Object> updateMenu(@RequestBody UpdateMenuVO updateMenuVO){
         return menuService.updateMenu(updateMenuVO);
     }
 

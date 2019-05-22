@@ -28,7 +28,7 @@ public class PasswordUtil {
     }
 
     public static void main(String[] args) {
-        System.out.println(generatePassword(StringUtil.md5("admin") + "admin"));
+        System.out.println(generatePassword("21232f297a57a5a743894a0e4a801fc3" + "admin"));
         System.out.println(verify(StringUtil.md5("admin"), "9F6AD23B1BDBB1C67C9FB35A90C0A646"));
     }
 

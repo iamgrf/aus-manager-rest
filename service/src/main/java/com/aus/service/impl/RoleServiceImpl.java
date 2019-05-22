@@ -1,5 +1,6 @@
 package com.aus.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.aus.domain.MenuDomain;
 import com.aus.domain.RoleDomain;
@@ -146,12 +147,25 @@ public class RoleServiceImpl implements RoleService {
         RoleBO roleBO = roleDomain.findById(id);
 
         Map<String, Object> cascadeMenu = new HashMap<>();
-        JSONArray menu = menuDomain.cascadeMenu();
-        List<Integer> checkIds = new ArrayList<>();
-        filter(roleBO.getAuthorityCode(), checkIds, menu);
-        cascadeMenu.put("menu", menu);
-        cascadeMenu.put("check", checkIds);
-        return MsgUtil.successful(cascadeMenu);
+        JSONArray menus = menuDomain.cascadeMenu();
+
+        for (int i = 0; i < menus.size(); i++) {
+            if (AuthenticationUtil.authentication(roleBO.getAuthorityCode(), menus.getJSONObject(i).getInteger("id"))){
+                menus.getJSONObject(i).put("checked", true);
+            }
+
+            JSONArray children = menus.getJSONObject(i).getJSONArray("children");
+            for (int i1 = 0; i1 < children.size(); i1++) {
+                if (AuthenticationUtil.authentication(roleBO.getAuthorityCode(), children.getJSONObject(i1).getInteger("id"))){
+                    children.getJSONObject(i1).put("checked", true);
+                }
+            }
+        }
+
+        String menuStr = JSON.toJSONString(menus).replace("menuName", "title");
+
+        cascadeMenu.put("menu", JSON.parse(menuStr));
+        return MsgUtil.successful(JSON.parse(menuStr));
     }
 
     private void filter(String authorityCode, List<Integer> checkIds, JSONArray menu){

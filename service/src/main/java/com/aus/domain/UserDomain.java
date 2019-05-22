@@ -23,7 +23,15 @@ public class UserDomain {
     private RoleDomain roleDomain;
 
     public List<UserBO> list(UserBO userBO) {
-        return userDao.list(userBO);
+        List<UserBO> bos = userDao.list(userBO);
+        bos.stream().forEach(bo -> {
+            if (bo.getRoleBO().getId() == null){
+                bo.setRoleBO(new RoleBO(-1, "未授权"));
+            }else{
+                bo.setRoleBO(roleDomain.findById(bo.getRoleBO().getId()));
+            }
+        });
+        return bos;
     }
 
     public Integer save(UserBO userBO) {
@@ -55,7 +63,7 @@ public class UserDomain {
     }
 
     public Integer update(UserBO userBO){
-        Objects.requireNonNull(userBO.getAccount());
+        Objects.requireNonNull(userBO.getId());
         return userDao.update(userBO);
     }
 

@@ -29,11 +29,10 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        response.setHeader("Access-Control-Allow-Origin", "http://127.0.0.1:8010");
-        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
-        response.setHeader("Access-Control-Allow-Headers", "x-requested-with,Authorization");
-        response.setHeader("Access-Control-Allow-Credentials","true");
+        response.setHeader("Access-Control-Allow-Headers", "Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
 
         String path = request.getServletPath();
         for (int i = 0; i < urls.length; i++) {
@@ -41,17 +40,18 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
                 return true;
             }
         }
-        if (path.endsWith(".html") || path.endsWith(".css") || path.endsWith(".js")){
+        if (path.endsWith(".html") || path.endsWith(".css") ||
+                path.endsWith(".js") || path.endsWith(".png") || path.endsWith(".jpg")){
             return true;
         }
-        String token = request.getParameter("token");
+        String token = request.getHeader("Authorization");
         if (StringUtils.isNotEmpty(token)){
             try{
                 String user = TokenUtil.verifyToken(token);
                 JSONObject userJSON = JSON.parseObject(user);
                 Integer pow = MenuPoolUtil.menus.get(path);
                 if (pow == null){
-                    return out(response, ErrorTypeEnum.ERROR_DISACCESS);
+                    return true;
                 }
                 Boolean b = AuthenticationUtil.authentication(userJSON.getString("authorityCode"), pow);
                 if (b){
@@ -63,7 +63,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
                 return out(response, ErrorTypeEnum.ERROR_RELOGIN);
             }
         }
-        return false;
+        return out(response, ErrorTypeEnum.ERROR_RELOGIN);
     }
 
     private Boolean out(HttpServletResponse response, ErrorTypeEnum msg){
