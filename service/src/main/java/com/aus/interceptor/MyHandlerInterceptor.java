@@ -67,6 +67,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
     }
 
     private Boolean out(HttpServletResponse response, ErrorTypeEnum msg){
+        response.setCharacterEncoding("utf-8");
         PrintWriter print = null;
         try{
             print = response.getWriter();

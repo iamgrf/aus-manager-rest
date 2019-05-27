@@ -9,6 +9,7 @@ import com.aus.vo.role.ListRoleVO;
 import com.aus.vo.role.UpdateRoleVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -25,7 +26,7 @@ public class RoleController {
     private RoleService roleService;
 
     @RequestMapping(value = Route.ADD_ROLE)
-    public Map<String, Object> addRole(AddRoleVO addRoleVO){
+    public Map<String, Object> addRole(@RequestBody AddRoleVO addRoleVO){
         return roleService.addRole(addRoleVO);
     }
 
@@ -40,7 +41,7 @@ public class RoleController {
     }
 
     @RequestMapping(value = Route.AUTHORIZED_ROLE)
-    public Map<String, Object> authorized(AuthorizedVO authorizedVO){
+    public Map<String, Object> authorized(@RequestBody AuthorizedVO authorizedVO){
         return roleService.authorized(authorizedVO);
     }
 
