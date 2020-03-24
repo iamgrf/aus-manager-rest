@@ -51,9 +51,9 @@ public class UserServiceImpl implements UserService {
         if ("0".equals(userBO.getDisable())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_DISABLE);
         }
-        if (!PasswordUtil.verify( loginVO.getPassword() + loginVO.getAccount(), userBO.getPassword())){
+        /*if (!PasswordUtil.verify( loginVO.getPassword() + loginVO.getAccount(), userBO.getPassword())){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_USER_PWD);
-        }
+        }*/
 
         if (userBO.getRoleBO() == null || userBO.getRoleBO().getAuthorityCode() == null){
             return MsgUtil.fail(ErrorTypeEnum.ERROR_DISACCESS);
@@ -102,9 +102,10 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Map<String, Object> listUser(ListUserVO listUserVO, PageUtil pageUtil) {
+    public Map<String, Object> listUser(ListUserVO listUserVO) {
         UserBO userBO = new UserBO();
-        Page<?> page = PageHelper.startPage(pageUtil.getPage(), pageUtil.getSize());
+        Page<?> page = PageHelper.startPage(listUserVO.getPage(), listUserVO.getSize());
+        userBO.setAccount(listUserVO.getAccount());
         List<UserBO> userBOs = userDomain.list(userBO);
 
         List<ListUserDTO> listUserDTOs = new ArrayList<>(userBOs.size());
@@ -119,6 +120,7 @@ public class UserServiceImpl implements UserService {
             listUserDTO.setCreateDate(DateUtil.dateToStr(userBOs.get(i).getCreateDate()));
             listUserDTOs.add(listUserDTO);
         }
+        PageUtil pageUtil = new PageUtil();
         pageUtil.setTotal(page.getTotal());
         pageUtil.setData(listUserDTOs);
         return MsgUtil.successful(pageUtil);
@@ -182,6 +184,15 @@ public class UserServiceImpl implements UserService {
         return MsgUtil.fail();
     }
 
+    @Override
+    public Map<String, Object> userMenus(String account) {
+        Map<String, Object> menus = menus(account);
+        if (menus == null){
+            return MsgUtil.fail(ErrorTypeEnum.ERROR_PARAM);
+        }
+        return MsgUtil.successful(menus);
+    }
+
     /**
      * 取得用户拥有的菜单
      * @param account
@@ -189,11 +200,15 @@ public class UserServiceImpl implements UserService {
      */
     private Map<String, Object> menus(String account) {
         if (StringUtils.isEmpty(account)){
-            return MsgUtil.fail(ErrorTypeEnum.ERROR_PARAM);
+            return null;
         }
         UserBO userBO = userDomain.findByAccount(account);
         if (userBO == null){
-            return MsgUtil.fail(ErrorTypeEnum.ERROR_PARAM);
+            return null;
+        }
+
+        if (userBO.getRoleBO() == null){
+            return null;
         }
 
         if (MenuPoolUtil.loginerInfo.containsKey(account)){
@@ -211,6 +226,7 @@ public class UserServiceImpl implements UserService {
         Map<String, Object> menusMap = new HashMap<>();
         menusMap.put("role_code", roleBO.getCode());
         menusMap.put("role_name", roleBO.getRoleName());
+        menusMap.put("authority_code", roleBO.getAuthorityCode());
         List<Map<String, String>> menus = new ArrayList<>();
         for (int i = 0; i < ids.size(); i++) {
             menuBO = menuDomain.get(ids.get(i));
@@ -224,6 +240,42 @@ public class UserServiceImpl implements UserService {
         MenuPoolUtil.loginerInfo.put(account, menusMap);
 
         return menusMap;
+    }
+
+    @Override
+    public Map<String, Object> authentication(AuthenticationVO vo) {
+
+        //初始化全局菜单
+        if (MenuPoolUtil.menus.size() == 0){
+            List<MenuBO> menuBOs = menuDomain.list(new MenuBO());
+            for (int i = 0; i < menuBOs.size(); i++) {
+                MenuPoolUtil.menus.put(menuBOs.get(i).getMenuCode(), menuBOs.get(i).getId());
+            }
+        }
+
+        Integer pow = MenuPoolUtil.menus.get(vo.getPath());
+        if (pow == null){
+            return MsgUtil.successful();
+        }
+
+        String authorityCode = "";
+        if (MenuPoolUtil.loginerInfo.containsKey(vo.getAccount())){
+            Map<String, Object> bo = (Map<String, Object>)MenuPoolUtil.loginerInfo.get(vo.getAccount());
+            authorityCode = String.valueOf(bo.get("authority_code"));
+        }else{
+            UserBO bo = userDomain.findByAccount(vo.getAccount());
+            if (bo == null){
+                return MsgUtil.fail();
+            }
+            authorityCode = bo.getRoleBO().getAuthorityCode();
+        }
+
+        Boolean b = AuthenticationUtil.authentication(authorityCode, pow);
+        if (b){
+            return MsgUtil.successful();
+        }else{
+            return MsgUtil.fail();
+        }
     }
 
     private void recursive(List<Integer> ids, String authorityCode, JSONArray jsonArray){

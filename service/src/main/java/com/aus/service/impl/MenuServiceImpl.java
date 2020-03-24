@@ -135,11 +135,9 @@ public class MenuServiceImpl implements MenuService {
         MenuPoolUtil.menus.clear();
         MenuPoolUtil.loginerInfo.clear();
         //初始化全局菜单
-        if (MenuPoolUtil.menus.size() == 0){
-            List<MenuBO> menuBOs = menuDomain.list(new MenuBO());
-            for (int i = 0; i < menuBOs.size(); i++) {
-                MenuPoolUtil.menus.put(menuBOs.get(i).getMenuCode(), menuBOs.get(i).getId());
-            }
+        List<MenuBO> menuBOs = menuDomain.list(new MenuBO());
+        for (int i = 0; i < menuBOs.size(); i++) {
+            MenuPoolUtil.menus.put(menuBOs.get(i).getMenuCode(), menuBOs.get(i).getId());
         }
     }
 }

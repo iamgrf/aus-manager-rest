@@ -15,7 +15,8 @@ import java.util.List;
 public class AuthenticationUtil {
 
     public static void main(String[] args) {
-        System.out.println(authentication("11000000000", 7));
+        System.out.println(authentication("10000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000", 23));
+//        System.out.println(AuthenticationUtil.orOperation("15365", "21", "1"));
     }
 
     /**

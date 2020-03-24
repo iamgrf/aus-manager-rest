@@ -63,7 +63,6 @@ public class UserDomain {
     }
 
     public Integer update(UserBO userBO){
-        Objects.requireNonNull(userBO.getId());
         return userDao.update(userBO);
     }
 

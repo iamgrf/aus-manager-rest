@@ -12,10 +12,10 @@
     </resultMap>
 
     <insert id="insert">
-      insert into t_user(real_name,account,password,disable,create_date) values (#{realName},#{account},#{password},#{disable},#{createDate})
+      insert into t_user(real_name,account,create_date) values (#{realName},#{account},#{createDate})
     </insert>
 
-    <select id="select" parameterType="com.aus.repository.po.UserPO" resultType="com.aus.repository.po.UserPO" resultMap="BaseResultMap">
+    <select id="select" parameterType="com.aus.repository.po.UserPO" resultMap="BaseResultMap">
         select * from t_user
         <where>
             <if test="id != null">
@@ -25,7 +25,7 @@
                 and real_name = #{realName}
             </if>
             <if test="account != null and account != ''">
-                and account = #{account}
+                and account like '%${account}%'
             </if>
             <if test="roleId != null">
                 and role_id = #{roleId}

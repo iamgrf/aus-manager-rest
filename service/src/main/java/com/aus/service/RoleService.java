@@ -14,7 +14,7 @@ import java.util.Map;
 public interface RoleService {
     Map<String,Object> addRole(AddRoleVO addRoleVO);
 
-    Map<String,Object> listRole(ListRoleVO listRoleVO, PageUtil pageUtil);
+    Map<String,Object> listRole(ListRoleVO listRoleVO);
 
     Map<String,Object> authorized(AuthorizedVO authorizedVO);
 

@@ -36,8 +36,8 @@ public class RoleController {
     }
 
     @RequestMapping(value = Route.LIST_ROLE)
-    public Map<String, Object> listRole(ListRoleVO listRoleVO, PageUtil pageUtil){
-        return roleService.listRole(listRoleVO, pageUtil);
+    public Map<String, Object> listRole(@RequestBody ListRoleVO listRoleVO){
+        return roleService.listRole(listRoleVO);
     }
 
     @RequestMapping(value = Route.AUTHORIZED_ROLE)

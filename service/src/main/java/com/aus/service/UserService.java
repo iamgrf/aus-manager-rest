@@ -13,7 +13,7 @@ import java.util.Map;
 public interface UserService {
     Map<String,Object> login(LoginVO loginVO);
 
-    Map<String,Object> listUser(ListUserVO listUserVO, PageUtil pageUtil);
+    Map<String,Object> listUser(ListUserVO listUserVO);
 
     Map<String,Object> addUser(AddUserVO addUserVO);
 
@@ -24,4 +24,8 @@ public interface UserService {
     Map<String,Object> delUser(String account);
 
     Map<String,Object> updatePassword(UpdatePasswordVO updatePasswordVO);
+
+    Map<String, Object> userMenus(String account);
+
+    Map<String, Object> authentication(AuthenticationVO vo);
 }

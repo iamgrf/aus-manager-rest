@@ -1,9 +1,11 @@
 package com.aus.vo.role;
 
+import com.aus.vo.BaseVO;
+
 /**
  * Created by xy on 2017/11/22.
  */
-public class ListRoleVO {
+public class ListRoleVO extends BaseVO {
 
     private String roleName;
     private String code;

@@ -1,7 +1,6 @@
 package com.aus.controller;
 
 import com.aus.service.UserService;
-import com.aus.util.PageUtil;
 import com.aus.Route;
 import com.aus.vo.user.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
 
 /**
@@ -29,8 +27,8 @@ public class UserController {
     }
 
     @RequestMapping(value = Route.LIST_USER)
-    public Map<String, Object> listUser(@RequestBody ListUserVO listUserVO, PageUtil pageUtil){
-        return userService.listUser(listUserVO, pageUtil);
+    public Map<String, Object> listUser(@RequestBody ListUserVO listUserVO){
+        return userService.listUser(listUserVO);
     }
 
     @RequestMapping(value = Route.UPDATE_PASSWORD)
@@ -39,7 +37,7 @@ public class UserController {
     }
 
     @RequestMapping(value = Route.ADD_USER)
-    public Map<String, Object> addUser(@RequestBody AddUserVO addUserVO){
+    public Map<String, Object> addUser(AddUserVO addUserVO){
         return userService.addUser(addUserVO);
     }
 
@@ -57,5 +55,16 @@ public class UserController {
     public Map<String, Object> authorized(@RequestBody AuthorizedVO authorizedVO){
         return userService.authorized(authorizedVO);
     }
+
+    @RequestMapping(value = Route.MENUS_USER)
+    public Map<String, Object> menus(String account){
+        return userService.userMenus(account);
+    }
+
+    @RequestMapping(value = Route.AUTHENTICATION_USER)
+    public Map<String, Object> authentication(AuthenticationVO vo){
+        return userService.authentication(vo);
+    }
+
 
 }

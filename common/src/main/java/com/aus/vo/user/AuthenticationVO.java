@@ -1,13 +1,9 @@
 package com.aus.vo.user;
 
-import com.aus.vo.BaseVO;
-
-/**
- * Created by xy on 2017/11/21.
- */
-public class ListUserVO extends BaseVO {
+public class AuthenticationVO {
 
     private String account;
+    private String path;
 
     public String getAccount() {
         return account;
@@ -15,5 +11,13 @@ public class ListUserVO extends BaseVO {
 
     public void setAccount(String account) {
         this.account = account;
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
     }
 }

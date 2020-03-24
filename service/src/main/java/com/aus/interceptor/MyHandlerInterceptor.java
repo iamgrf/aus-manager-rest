@@ -33,8 +33,8 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
         response.setHeader("Access-Control-Allow-Methods", "*");
         response.setHeader("Access-Control-Max-Age", "3600");
         response.setHeader("Access-Control-Allow-Headers", "Authorization, Access-Control-Allow-Headers, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-
-        String path = request.getServletPath();
+        return true;
+        /*String path = request.getServletPath();
         for (int i = 0; i < urls.length; i++) {
             if (path.startsWith(urls[i])){
                 return true;
@@ -63,7 +63,7 @@ public class MyHandlerInterceptor implements HandlerInterceptor {
                 return out(response, ErrorTypeEnum.ERROR_RELOGIN);
             }
         }
-        return out(response, ErrorTypeEnum.ERROR_RELOGIN);
+        return out(response, ErrorTypeEnum.ERROR_RELOGIN);*/
     }
 
     private Boolean out(HttpServletResponse response, ErrorTypeEnum msg){

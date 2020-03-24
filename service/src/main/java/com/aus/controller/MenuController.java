@@ -24,12 +24,12 @@ public class MenuController {
     private MenuService menuService;
 
     @RequestMapping(value = Route.ADD_MENU)
-    public Map<String, Object> addMenu(AddMenuVO addMenuVO){
+    public Map<String, Object> addMenu(@RequestBody AddMenuVO addMenuVO){
         return menuService.addMenu(addMenuVO);
     }
 
     @RequestMapping(value = Route.LIST_MENU)
-    public Map<String, Object> listMenu(ListMenuVO listMenuVO, PageUtil pageUtil){
+    public Map<String, Object> listMenu(@RequestBody ListMenuVO listMenuVO, PageUtil pageUtil){
         return menuService.listMenu(listMenuVO, pageUtil);
     }
 

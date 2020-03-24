@@ -39,11 +39,11 @@ public class RoleServiceImpl implements RoleService {
     private UserDomain userDomain;
 
     @Override
-    public Map<String, Object> listRole(ListRoleVO listRoleVO, PageUtil pageUtil) {
+    public Map<String, Object> listRole(ListRoleVO listRoleVO) {
         RoleBO roleBO = new RoleBO();
         roleBO.setRoleName(listRoleVO.getRoleName());
         roleBO.setCode(listRoleVO.getCode());
-        Page<?> page = PageHelper.startPage(pageUtil.getPage(), pageUtil.getSize());
+        Page<?> page = PageHelper.startPage(listRoleVO.getPage(), listRoleVO.getSize());
         List<RoleBO> roleBOs = roleDomain.list(roleBO);
         List<ListRoleDTO> listMenuDTOs = new ArrayList<>(roleBOs.size());
         ListRoleDTO listRoleDTO = null;
@@ -56,6 +56,7 @@ public class RoleServiceImpl implements RoleService {
             listRoleDTO.setCreateDate(DateUtil.dateToStr(roleBOs.get(i).getCreateDate()));
             listMenuDTOs.add(listRoleDTO);
         }
+        PageUtil pageUtil = new PageUtil();
         pageUtil.setTotal(page.getTotal());
         pageUtil.setData(listMenuDTOs);
         return MsgUtil.successful(pageUtil);
@@ -158,6 +159,12 @@ public class RoleServiceImpl implements RoleService {
             for (int i1 = 0; i1 < children.size(); i1++) {
                 if (AuthenticationUtil.authentication(roleBO.getAuthorityCode(), children.getJSONObject(i1).getInteger("id"))){
                     children.getJSONObject(i1).put("checked", true);
+                }
+                JSONArray childrens = children.getJSONObject(i1).getJSONArray("children");
+                for (int i2 = 0; i2 < childrens.size(); i2++) {
+                    if (AuthenticationUtil.authentication(roleBO.getAuthorityCode(), childrens.getJSONObject(i2).getInteger("id"))){
+                        childrens.getJSONObject(i2).put("checked", true);
+                    }
                 }
             }
         }
