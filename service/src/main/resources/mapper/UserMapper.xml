@@ -25,7 +25,7 @@
                 and real_name = #{realName}
             </if>
             <if test="account != null and account != ''">
-                and account like '%${account}%'
+                and account = #{account}
             </if>
             <if test="roleId != null">
                 and role_id = #{roleId}
